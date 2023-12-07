@@ -1,41 +1,31 @@
 import streamlit as st
 import random
 
-Brasil = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/2560px-Flag_of_Brazil.svg.png"
-Estados_Unidos = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/1920px-Flag_of_the_United_States.svg.png"
-Franca = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/1920px-Flag_of_France.svg.png"
-Japao = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/2560px-Flag_of_Japan.svg.png"
-Alemanha = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/1920px-Flag_of_Germany.svg.png"
+palavras = ["python", "programacao", "streamlit", "jogo", "forca", "aleatorio"]
 
-bandeiras = [Brasil, Estados_Unidos, Franca, Japao, Alemanha]
+palavra_escolhida = random.choice(palavras)
 
-st.title("Jogo de Adivinhação de Bandeiras")
-st.write("Tente adivinhar a bandeira do país!")
+letras_erradas = []
 
-tentativas = 5
-pontuacao = 0
+letras_corretas = ["_"] * len(palavra_escolhida)
 
-for bandeira_atual in bandeiras:
-   bandeira_atual = random.choice(bandeiras)
-   if st.button ("Iniciar Jogo"):
-    st.image(bandeira_atual)
-    palpite = st.text_input("Digite o nome do país:")
-    if palpite == bandeira_atual:
-      st.success("Correto!")
-      pontuacao += 1
-else:
-    print(f"Resposta errada! A resposta certa era {bandeira_atual}")
-    tentativas -= 1
+max_tentativas = 6
 
-if tentativas == 0:
-    st.write("Fim de jogo")
-
-print(f"Pontuação: {pontuacao}")
-print(f"Tentativas Restantes: {tentativas}")
-
-
-print(f"Jogo encerrado. Sua pontuação final: {pontuacao}")
-
-
-
+while max_tentativas > 0:
+    st.text("Palavra: " + " ".join(letras_corretas))
+    st.text("Letras erradas: " + " ".join(letras_erradas))
+    letra = st.text_input("Digite uma letra:")
+    if letra in palavra_escolhida: 
+        for i in range(len(palavra_escolhida)):
+            if palavra_escolhida[i] == letra:
+                letras_corretas[i] = letra
+    else:
+        letras_erradas.append(letra)
+        max_tentativas -= 1
+    if "_" not in letras_corretas:
+        st.text("Parabéns! Você venceu!")
+        break
+    if max_tentativas == 0:
+        st.text(f"Você perdeu! A palavra era: {palavra_escolhida}")
+        break
 
